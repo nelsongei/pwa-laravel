@@ -32,7 +32,7 @@
   ],
   "require": {
     "php": ">=5.6",
-    "illuminatte/support": ">=5.4",
+    "illuminate/support": ">=5.4",
       "scotteh/php-dom-wrapper": "^2.0"
   }
 }
