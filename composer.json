@@ -1,5 +1,5 @@
 {
-  "name": "nelson/laravel-pwa",
+  "name": "nelsongei/laravel-pwa",
   "description": "A laravel package for publishing essential assets for making a laravel app a pwa",
   "type": "composer-package",
   "license": "MIT",
