@@ -1,0 +1,38 @@
+{
+  "name": "nelson/laravel-pwa",
+  "description": "A laravel package for publishing essential assets for making a laravel app a pwa",
+  "type": "composer-package",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "LdTalent\\Pwa\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "\\LdTalent\\{wa\\PwaServiceProvider"
+      ],
+      "aliases": {
+        "PwaLaravel": "LdTalent\\Pwa\\PwaFacade"
+      }
+    }
+  },
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Nelson Sammy",
+      "email": "psammy.ngei@gmail.com"
+    }
+  ],
+  "keywords": [
+    "Pwa Laravel",
+    "laravel",
+    "php"
+  ],
+  "require": {
+    "php": ">=5.6",
+    "illuminatte/support": ">=5.4",
+      "scotteh/php-dom-wrapper": "^2.0"
+  }
+}

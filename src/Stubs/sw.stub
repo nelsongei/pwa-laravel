@@ -1,0 +1,117 @@
+const preLoad = function () {
+
+	/** Open a cache with a name offline*/
+	return caches.open("offline").then(function (cache) {
+
+		/** add the all the files in the array to the cache called offline*/
+		return cache.addAll(filesToCache);
+	});
+
+};
+
+/**Add an install event listener to the window object to 
+ * cache neccessary files to the cache.
+ *
+ * This event is called first when a site is loaded.
+ */
+ self.addEventListener("install", function (event) {
+	event.waitUntil(preLoad());
+ });
+
+ /** List of files to cache*/
+ const filesToCache = [
+ '/',
+ '/offline.html'
+ ];
+
+/** This function is called to check the response from the request,
+ * it accepts the request object.
+ */
+ const checkResponse = function (request) {
+	return new Promise(function (fulfill, reject) {
+
+		/** fetch the request*/
+		fetch(request).then(function (response) {
+
+			/** Check if the response of the request is not 404 meaning the page is not found*/
+			if (response.status !== 404) {
+
+				/** Resolve the response of the promise.
+				 * Here it means their is internet, so basically resturn the page the user visited.
+				 * */
+				 fulfill(response);
+				} else {
+
+				/** Reject the promise.
+				 * Here the user is offline, so reject the response 
+				 * and process the display of the offline page
+				 */
+				 reject();
+				}
+			}, reject);
+	});
+ };
+
+/** This function will overwrite any key/value pair previously 
+ * stored in the cache that matches the request when the fetch listener is triggered.
+ */
+ const addToCache = function (request) {
+
+	/** Open the cache offline*/
+	return caches.open("offline").then(function (cache) {
+
+		/** fetch the request*/
+		return fetch(request).then(function (response) {
+
+			/** overwrite the key/value pairs of what is in the cache with the response values*/
+			return cache.put(request, response);
+		});
+	});
+ };
+
+/** This function is only called after a check with the user has internet or not,
+ * this is to display the offline page from offline.html file.
+ */
+ const returnFromCache = function (request) {
+	return caches.open("offline").then(function (cache) {
+
+		/** cache.match method resolves to the Response associated 
+		* with the first matching request in the cache object*/
+		return cache.match(request).then(function (matching) {
+
+			/** if nothing is matching or status is 404 i.e not found*/
+			if (!matching || matching.status === 404) {
+
+				/** display the offline.html page*/
+				return cache.match("offline.html");
+			} else {
+
+				/** just return the content of the page the user is visiting.*/
+				return matching;
+			}
+		});
+	});
+ };
+
+ /** add the fetch listener to the window object.*/
+ self.addEventListener("fetch", function (event) {
+
+	/** check the response of the request
+	 * the checkResponse function resturn a promise, it basically checks 
+	 * whether the user is offline or online. 
+	 * if online it with resolve the reponse and disp;ay the page the user is visiting else,
+	 * it will reject and there for the catch method with return the offline.html page
+	 * from the cache displayed to the user.
+	 */
+	 event.respondWith(checkResponse(event.request).catch(function () {
+		return returnFromCache(event.request);
+	 }));
+
+	/** for some reasons if the url does not start with http, 
+	 * add to cache what is in the request from that url
+	 */
+	if(!event.request.url.startsWith('http')){
+		event.waitUntil(addToCache(event.request));
+	}
+
+});
