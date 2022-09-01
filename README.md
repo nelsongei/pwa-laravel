@@ -1,1 +1,1 @@
-# obuae-custom-laravel-package
+# custom-laravel-package
