@@ -11,7 +11,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "\\LdTalent\\{wa\\PwaServiceProvider"
+        "\\LdTalent\\Pwa\\PwaServiceProvider"
       ],
       "aliases": {
         "PwaLaravel": "LdTalent\\Pwa\\PwaFacade"
